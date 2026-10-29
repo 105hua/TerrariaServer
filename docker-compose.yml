@@ -1,0 +1,28 @@
+# All settings are optional - copy .env.example to .env to change them.
+services:
+  terraria:
+    build:
+      context: .
+      args:
+        TERRARIA_VERSION: ${TERRARIA_VERSION:-latest}
+    # Each version gets its own tag, so changing TERRARIA_VERSION builds it automatically.
+    image: terraria-vanilla:${TERRARIA_VERSION:-latest}
+    # Never look on Docker Hub - the image is always built locally from this Dockerfile.
+    pull_policy: never
+    restart: unless-stopped
+    # Time allowed for the world to save on `docker compose stop` / `down`.
+    stop_grace_period: 60s
+    ports:
+      - "${SERVER_PORT:-7777}:7777/tcp"
+    volumes:
+      - ./data:/data
+    environment:
+      SERVER_PASSWORD: ${SERVER_PASSWORD:-}
+      WORLD_NAME: ${WORLD_NAME:-world}
+      WORLD_SIZE: ${WORLD_SIZE:-medium}
+      WORLD_DIFFICULTY: ${WORLD_DIFFICULTY:-classic}
+      WORLD_SEED: ${WORLD_SEED:-}
+      MAX_PLAYERS: ${MAX_PLAYERS:-8}
+      MOTD: ${MOTD:-}
+      PUID: ${PUID:-1000}
+      PGID: ${PGID:-1000}

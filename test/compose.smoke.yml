@@ -1,0 +1,7 @@
+# Overlay used by test/smoke.sh: isolates the test's data directory and image tag
+# from a real server running out of the same checkout.
+services:
+  terraria:
+    image: ${SMOKE_IMAGE:-terraria-vanilla-smoke}:${TERRARIA_VERSION:-latest}
+    volumes:
+      - ${SMOKE_DATA_DIR:-./test/.data}:/data

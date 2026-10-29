@@ -1,0 +1,18 @@
+#!/bin/sh
+# Sends a command to the running Terraria server console.
+# Usage: docker compose exec terraria console say Hello everyone
+# Output appears in `docker compose logs`.
+set -eu
+
+CONSOLE_PIPE=/tmp/terraria-console
+
+if [ "$#" -eq 0 ]; then
+    echo "Usage: console <command>   e.g. console say Hello" >&2
+    exit 2
+fi
+if [ ! -p "$CONSOLE_PIPE" ]; then
+    echo "The Terraria server is not running." >&2
+    exit 1
+fi
+
+printf '%s\n' "$*" > "$CONSOLE_PIPE"
